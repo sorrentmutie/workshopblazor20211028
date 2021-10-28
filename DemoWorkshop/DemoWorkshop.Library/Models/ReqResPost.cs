@@ -7,7 +7,7 @@ namespace DemoWorkshop.Library.Models
         [Required(ErrorMessage = "Campo Obbligatorio")]
         [StringLength(50, ErrorMessage ="Nome troppo lungo")]
         public string name { get; set; }
-        [Required]
+        [Required(ErrorMessage = "Job Obbligatorio")]
         public string job { get;  set; }
     }
 }

@@ -11,7 +11,25 @@
 }
 else
 {
-    <DettaglioReqResPost Elemento="PostData" OnSalva="Salva" OnAnnulla="Annulla"></DettaglioReqResPost>
+    <DettaglioReqResPost Elemento="PostData" OnSalva="Salva" OnAnnulla="Annulla">
+
+        <CampiDelForm>
+            <div class="form-group">
+                <label for="nome">Nome:</label>
+                <InputText id="nome" class="form-control" @bind-Value="PostData.name"></InputText>
+                <ValidationMessage For="@( () => PostData.name )"></ValidationMessage>
+            </div>
+
+            <div class="form-group">
+                <label for="job">Job:</label>
+                <InputText id="job" class="form-control" @bind-Value="PostData.job"></InputText>
+                <ValidationMessage For="@( () => PostData.job )"></ValidationMessage>
+
+            </div>
+        </CampiDelForm>
+
+
+    </DettaglioReqResPost>
 }
 
 @code {
@@ -36,9 +54,9 @@ else
         Message = "";
     }
 
-    private async Task Salva(ReqResPost dati)
+    private async Task Salva()
     {
-        var status = await servizio.CreaUtente(dati);
+        var status = await servizio.CreaUtente(PostData);
         Message = status.ToString();
         PostData = null;
     }
