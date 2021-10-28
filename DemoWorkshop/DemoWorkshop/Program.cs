@@ -1,11 +1,11 @@
+using DemoWorkshop.Library.Interfaces;
+using DemoWorkshop.Services;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Http;
+using Polly;
 using System;
-using System.Collections.Generic;
 using System.Net.Http;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace DemoWorkshop
@@ -17,7 +17,16 @@ namespace DemoWorkshop
             var builder = WebAssemblyHostBuilder.CreateDefault(args);
             builder.RootComponents.Add<App>("#app");
 
-            builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
+            builder.Services.AddHttpClient("reqres", client => {
+                client.BaseAddress = new Uri("https://reqres.in");
+            })
+            .AddTransientHttpErrorPolicy(builder =>
+                builder.WaitAndRetryAsync( new [] { 
+                TimeSpan.FromSeconds(1), TimeSpan.FromSeconds(5), TimeSpan.FromSeconds(20)
+                }));
+
+            builder.Services.AddScoped<IDatiEventi, DatiEventiStatici>();
+            builder.Services.AddScoped<IReqResData, ReqResService>();
 
             await builder.Build().RunAsync();
         }

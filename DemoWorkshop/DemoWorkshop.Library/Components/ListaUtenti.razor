@@ -1,0 +1,42 @@
+﻿@inject IReqResData servizioDati 
+
+<div class="jumbotron">
+    <h3>Lista Utenti</h3>
+    <button @onclick="Cancella" class="btn btn-warning">Cancella Richiesta</button>
+</div>
+
+@if (Dati != null && Dati.data != null)
+{
+    @foreach (var utente in Dati.data)
+    {
+        <div class="card" style="width: 18rem;">
+            <img class="card-img-top" src="@utente.avatar" alt="Card image cap">
+            <div class="card-body">
+                <h5 class="card-title">@utente.first_name @utente.last_name</h5>
+                <p class="card-text">@utente.email</p>
+                <button class="btn btn-warning" @onclick="() => OnModifica.InvokeAsync(utente)">Modifica</button>
+            </div>
+        </div>
+    }
+}
+
+@code {
+    public ReqResData Dati { get; set; } = new ReqResData();
+
+    [Parameter]
+    public EventCallback<Person> OnModifica { get;set;}
+
+    protected override async Task OnInitializedAsync()
+    {
+        Dati = await servizioDati.EstraiDati();
+    }
+
+    private void Cancella()
+    {
+        servizioDati.CancelRequest();
+    }
+
+   
+
+
+}

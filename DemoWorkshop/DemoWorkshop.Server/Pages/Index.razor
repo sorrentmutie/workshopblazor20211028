@@ -1,0 +1,6 @@
+﻿@page "/"
+@inject IDatiEventi servizio
+
+<h1>Hello, server!</h1>
+
+<TabellaEventi Titolo="DemoServer" Eventi="@servizio.EstraiEventiPassati()"></TabellaEventi>

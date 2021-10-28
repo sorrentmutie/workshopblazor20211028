@@ -1,15 +1,17 @@
 ﻿@page "/"
+@inject IDatiEventi servizio
 
 <h1>Workshop Blazor</h1>
 
 <TabellaEventi Eventi="EventiPassati" Titolo="Eventi Passati"></TabellaEventi>
 
-
-
 @code {
-    private List<Evento> EventiPassati = new List<Evento> {
-        new Evento() { Id = 1, Data = DateTime.Today.AddDays(-1), Localita = "Napoli", Titolo = "Workshop Blazor"},
-        new Evento() { Id = 2, Data = DateTime.Today.AddDays(-3), Localita = "Roma", Titolo = "Workshop ASP.NET"},
-        new Evento { Id = 3, Data = DateTime.Today.AddDays(-4), Localita = "Milano", Titolo = "Workshop Blazor"}
-        };
+
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+        EventiPassati = servizio.EstraiEventiPassati();
+    }
+
+    private List<Evento> EventiPassati = new List<Evento> ();
 } 

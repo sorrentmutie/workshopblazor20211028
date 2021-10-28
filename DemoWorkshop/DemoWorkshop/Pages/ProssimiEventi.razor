@@ -1,18 +1,27 @@
 ﻿@page "/prossimieventi"
+@inject IDatiEventi servizio
+
 <TabellaEventi Eventi="EventiFuturi" Titolo="Eventi Futuri" 
-               OnCancella="CancellaEvento"></TabellaEventi>
+               OnCancella="CancellaEvento">
+    <ContenutoFiglio>
+        <p>@Data.ToShortDateString()</p>
+    </ContenutoFiglio>
+</TabellaEventi>
 
 @code {
-    private List<Evento> EventiFuturi = new List<Evento> {
-        new Evento() { Id = 1, Data = DateTime.Today, Localita = "Napoli", Titolo = "Workshop Blazor"},
-        new Evento() { Id = 2, Data = DateTime.Today.AddDays(1), Localita = "Roma", Titolo = "Workshop ASP.NET"},
-        new Evento { Id = 3, Data = DateTime.Today.AddDays(2), Localita = "Milano", Titolo = "Workshop Blazor"}
-        };
+
+    private List<Evento> EventiFuturi = new List<Evento>();
+
+    protected override void OnInitialized()
+    {
+        EventiFuturi = servizio.EstraiEventiFuturi();
+    }
 
     public void CancellaEvento(Evento evento)
     {
         EventiFuturi.Remove(evento);
     }
 
+    public DateTime Data { get; set; } = DateTime.Now;
 
 }

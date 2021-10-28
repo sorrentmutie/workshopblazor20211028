@@ -1,0 +1,31 @@
+﻿<h3></h3>
+
+<EditForm Model="Elemento" OnValidSubmit="@( () => OnSalva.InvokeAsync(Elemento))">
+
+    <div class="form-group">
+        <label for="nome">Nome:</label>
+        <InputText id="nome" class="form-control" @bind-Value="Elemento.name"></InputText>
+    </div>
+
+    <div class="form-group">
+        <label for="job">Job:</label>
+        <InputText id="job" class="form-control" @bind-Value="Elemento.job"></InputText>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Salva</button>
+    <button type="button" class="btn btn-danger" @onclick="() => OnAnnulla.InvokeAsync()">Annulla</button>
+</EditForm>
+
+
+@code {
+
+    [Parameter]
+    public ReqResPost Elemento { get; set; }
+
+    [Parameter]
+    public EventCallback<ReqResPost> OnSalva { get; set; }
+
+    [Parameter]
+    public EventCallback<ReqResPost> OnAnnulla { get; set; }
+
+}

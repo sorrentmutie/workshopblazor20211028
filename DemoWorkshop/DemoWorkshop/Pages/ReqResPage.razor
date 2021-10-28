@@ -1,0 +1,45 @@
+﻿@page "/reqres"
+@inject IReqResData servizio
+
+
+@if (PostData == null)
+{
+    <button @onclick="CreaUtente" class="btn btn-danger">Crea  Utente</button>
+    @Message
+
+    <ListaUtenti OnModifica="Modifica"></ListaUtenti>
+}
+else
+{
+    <DettaglioReqResPost Elemento="PostData" OnSalva="Salva" OnAnnulla="Annulla"></DettaglioReqResPost>
+}
+
+@code {
+
+    private ReqResPost PostData;
+    public string Message = "";
+
+    private void CreaUtente()
+    {
+        PostData = new ReqResPost();
+    }
+
+    private void Modifica(Person persona)
+    {
+        PostData = new ReqResPost { name = persona.first_name + " " + persona.last_name };
+    }
+
+
+    private void Annulla()
+    {
+        PostData = null;
+        Message = "";
+    }
+
+    private async Task Salva(ReqResPost dati)
+    {
+        var status = await servizio.CreaUtente(dati);
+        Message = status.ToString();
+        PostData = null;
+    }
+}
