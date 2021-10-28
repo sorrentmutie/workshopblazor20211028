@@ -1,0 +1,27 @@
+﻿@page "/nuovoevento"
+<DettaglioReqResPost TItem="Evento" Elemento="NuovoEvento" OnSalva="Salva" OnAnnulla="Annulla">
+
+    <CampiDelForm>
+        <MyInputNumber Id="id" Label="Id:" @bind-Value="NuovoEvento.Id"></MyInputNumber>
+        <MyInputText Id="titolo" Label="Titolo:" @bind-Value="NuovoEvento.Titolo"></MyInputText>
+        <MyInputText Id="localita" Label="Job:" @bind-Value="NuovoEvento.Localita"></MyInputText>
+        <MyInputDatetime Id="data" Label="Data:" @bind-Value="NuovoEvento.Data"></MyInputDatetime>
+    </CampiDelForm>
+
+</DettaglioReqResPost>
+
+
+
+@code {
+    public Evento NuovoEvento = new Evento() { 
+        Data = DateTime.Today
+    };
+
+    private void Annulla()
+    {
+    }
+
+    private async Task Salva()
+    {
+    }
+}
