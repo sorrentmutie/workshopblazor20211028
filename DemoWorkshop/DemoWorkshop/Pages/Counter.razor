@@ -1,16 +1,64 @@
 ﻿@page "/counter"
+@inject IJSRuntime jsRuntime
 
-<h1>Counter</h1>
+<button class="btn btn-success" @onclick="InvocaJavascript">Invoca javascript</button>
+@Message
 
-<p>Current count: @currentCount</p>
+<button @onclick="MostraModale">Mostra Modale</button>
+<MyModal Id="mymodal" Titolo="La mia modale" OnSave="Salva" OnClose="Chiudi">
+    <Body>
+        <p>Esempio di modale</p>
+    </Body>
+</MyModal>
 
-<button class="btn btn-primary" @onclick="IncrementCount">Click me</button>
+<MyMap Zoom="@zoom" Center="Via Toledo 1,  Napoli"></MyMap>
+
 
 @code {
-    private int currentCount = 0;
 
-    private void IncrementCount()
+    public string Message { get; set; } = "Messaggio";
+    public int zoom = 16;
+
+    public async Task InvocaJavascript()
     {
-        currentCount++;
+        // Message = await jsRuntime.InvokeAsync<string>("miaPrimaFunzione", "Mario");
+        //var x =  await jsRuntime.InvokeAsync<int>("secondaFunzione", 4, 5);
+
+
+
+        var myInterop = new MiaClasseJavascriptInterop(jsRuntime);
+
+        await myInterop.MiaQuartaFunzione("Giuseppe");
     }
+
+    [JSInvokable]
+    public static Task<int[]> RestituisciArrayAsync()
+    {
+        return Task.FromResult(new int[] { 1, 4, 8, 34, 68 });
+    }
+
+
+    [JSInvokable]
+    public static Task<string> ReturnHtml()
+    {
+        return Task.FromResult("<p>Un contenuto che viene da C#</p>");
+    }
+
+
+    private async Task MostraModale()
+    {
+        await jsRuntime.InvokeVoidAsync("mostraModale");
+    }
+
+    private async Task Salva()
+    {
+        await jsRuntime.InvokeVoidAsync("nascondiModale");
+    }
+
+    private async Task Chiudi()
+    {
+        await jsRuntime.InvokeVoidAsync("nascondiModale");
+
+    }
+
 }

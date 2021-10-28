@@ -1,0 +1,38 @@
+﻿@inject IJSRuntime jsRuntime 
+
+<div id="map" style="height:@Height;width:@Width" @ref="ReferenzaMappa"></div>
+
+@code {
+    private ElementReference ReferenzaMappa;
+    [Parameter] public string Height { get; set; } = "500px";
+    [Parameter] public string Width { get; set; } = "100%";
+    [Parameter] public int Zoom { get; set; } = 8;
+    [Parameter] public string Center { get; set; } = "";
+
+    private bool firstRender = true;
+
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if(firstRender)
+        {
+
+            this.firstRender = firstRender;
+            await MostraMappa();
+        }
+    }
+
+    protected override async Task OnParametersSetAsync()
+    {
+        if (!firstRender)
+        {
+            await MostraMappa();
+        }
+    }
+
+
+    private async Task MostraMappa()
+    {
+        await jsRuntime.InvokeVoidAsync("mostraMappa", ReferenzaMappa, Zoom, Center);
+    }
+}
